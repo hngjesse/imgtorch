@@ -10,8 +10,7 @@ setup(
         'rawpy',
         'tqdm',
         'matplotlib',
-        'torchvision',
-        'warnings'
+        'torchvision'
     ],
     author='Jesse Hng',
     description='A simple image import and processing library',

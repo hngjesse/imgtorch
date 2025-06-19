@@ -1,0 +1,14 @@
+Metadata-Version: 2.2
+Name: imgimp
+Version: 0.1
+Summary: A simple image import and processing library
+Author: Jesse Hng
+Requires-Dist: torch
+Requires-Dist: Pillow
+Requires-Dist: rawpy
+Requires-Dist: tqdm
+Requires-Dist: matplotlib
+Requires-Dist: torchvision
+Dynamic: author
+Dynamic: requires-dist
+Dynamic: summary
