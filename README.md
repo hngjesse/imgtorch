@@ -1,5 +1,5 @@
-# ImgImp: Image Importer and Preprocessor for Classification Tasks
-`ImgImp` is a lightweight, dependency-conscious Python class for importing, preprocessing, and managing image datasets for machine learning projects using PyTorch.
+# ImgTorch: Image Importer and Preprocessor for Classification Tasks
+`ImgTorch` is a lightweight, dependency-conscious Python class for importing, preprocessing, and managing image datasets for machine learning projects using PyTorch.
 
 This tool helps automate the process of:
 - Collecting image file paths from organized folders
@@ -38,12 +38,12 @@ your_dataset/
 ## Getting Started
 ### 1. Initialize
 ```python
-from imgimp import ImgImp
+from imgtorch import ImgTorch
 
 base_dir = 'your_dataset'
 classes = ['ClassA', 'ClassB']
 img_size = (128, 128)
-imp = ImgImp(baseDir=base_dir, classDir=classes, imageSize=img_size)
+imp = ImgTorch(baseDir=base_dir, classDir=classes, imageSize=img_size)
 ```
 
 ### 2. Load and Preprocess Images
