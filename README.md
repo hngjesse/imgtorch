@@ -1,81 +1,96 @@
-# ImgTorch: Image Importer and Preprocessor for Classification Tasks
-`ImgTorch` is a lightweight, dependency-conscious Python class for importing, preprocessing, and managing image datasets for machine learning projects using PyTorch.
+# ImgTorch: A Lightweight Image Dataset Loader for PyTorch
 
-This tool helps automate the process of:
-- Collecting image file paths from organized folders
-- Supporting raw and standard image formats
-- Resizing and padding images uniformly
-- Converting images to PyTorch tensors
-- Saving the dataset as `.pt` files
-- Previewing image samples for verification
+**ImgTorch** is a minimal yet powerful image importer and preprocessor tailored for classification tasks in PyTorch. It supports both common and RAW image formats, applies consistent preprocessing, and enables fast dataset creation and visualization — all with minimal dependencies.
 
 ---
 
-## Features
-- Supports JPEG, PNG, and RAW image formats (e.g., `.cr2`, `.nef`, `.dng`, etc.)
-- Directory-based class labeling: each subfolder is treated as a class
-- Automatic resizing and padding to ensure uniform dimensions
-- Error handling for corrupted or unreadable images
-- Live preview of random processed images
-- Minimal dependencies: only uses PyTorch, PIL, rawpy, and matplotlib
+## Key Features
+
+- **Directory-based class labeling** — each subfolder = one class
+- **Supports RAW and standard formats**: `.jpg`, `.png`, `.cr2`, `.nef`, `.dng`, etc.
+- **Aspect-preserving resize and padding** to uniform shape
+- **Converts to PyTorch tensors** ready for training
+- **Save/load dataset** as `.pt` files for fast reuse
+- **Live previews** via matplotlib and terminal-friendly ASCII art
+- **Graceful handling** of unreadable or corrupted files
+- **Minimal dependencies**: Only uses PyTorch, Pillow, rawpy, matplotlib, tqdm
 
 ---
 
 ## Folder Structure
-Expected structure for input images:
 
+Your dataset should be organized by class subfolders:
+
+```
 your_dataset/
 ├── ClassA/
-│ ├── img1.jpg
-│ └── img2.png
+│   ├── img1.jpg
+│   └── img2.png
 ├── ClassB/
-│ ├── img3.cr2
-│ └── img4.jpeg
+│   ├── img3.cr2
+│   └── img4.jpeg
+```
 
 ---
 
-
 ## Getting Started
+
 ### 1. Initialize
+
 ```python
 from imgtorch import ImgTorch
 
-base_dir = 'your_dataset'
-classes = ['ClassA', 'ClassB']
-img_size = (128, 128)
-imp = ImgTorch(baseDir=base_dir, classDir=classes, imageSize=img_size)
+imp = ImgTorch(
+    baseDir="your_dataset",
+    classDir=["ClassA", "ClassB"],
+    imageSize=(128, 128)
+)
 ```
 
-### 2. Load and Preprocess Images
+### 2. Load and Preprocess
+
 ```python
-imp.collect_images()
-imp.shuffle_images()
-imp.process_images()
+imp.collect_images()     # Scan all images
+imp.shuffle_images()     # Optional: randomize order
+imp.process_images()     # Load, resize, convert to tensor
 ```
 
-### 3. Preview and Export the Data
+### 3. Preview
+
 ```python
-imp.preview_images(max_images=6)
-imp.save_dataset('output_dataset.pt')
-imp.process_images()
+imp.preview_images(max_images=6)         # Matplotlib preview
+imp.preview_ASCII(count=3, contrast=1.2) # Terminal-friendly ASCII visualization
 ```
 
-### 4. Use the Dataset
+### 4. Save and Use
+
 ```python
-X, Y = imp.get_dataset()
-print(X.shape, Y.shape)  # Example: (N, 3, 128, 128), (N,)
+imp.save_dataset("dataset.pt")    # Save tensors to disk
+X, Y = imp.get_dataset()          # Retrieve processed data
+print(X.shape, Y.shape)
 ```
 
+---
 
-## Notes
-- Corrupted or unreadable files (e.g., truncated TIFFs) are automatically skipped and reported.
-- RAW files are processed using rawpy, then converted to RGB with PIL.
-- Image resizing is done with thumbnail() to preserve aspect ratio, followed by center-padding.
+## Additional Notes
+
+- RAW formats are decoded using `rawpy` and converted to RGB using `Pillow`.
+- Aspect ratio is preserved using `thumbnail()` and centered padding.
+- Corrupted or unreadable files are skipped and listed.
+
+---
 
 ## Dependencies
-- Make sure to install:
-- pip install torch torchvision pillow rawpy matplotlib tqdm
+
+Install with:
+
+```bash
+pip install torch torchvision pillow rawpy matplotlib tqdm
+```
+
+---
 
 ## Author
-Created by Jesse Hng, 2025
-A practical tool for self-managed ML dataset handling.
+
+**Jesse Hng**, 2025  
+_A practical tool for quick dataset preparation in terminal or notebook environments._

@@ -6,6 +6,7 @@ from torchvision import transforms
 from tqdm import tqdm
 import warnings
 import matplotlib.pyplot as plt
+#import plotext as plt_ext
 
 
 class ImgTorch:
@@ -246,6 +247,113 @@ class ImgTorch:
         plt.suptitle("Preview of Random Processed Images", fontsize=14)
         plt.tight_layout()
         plt.show()
+
+    def preview_ASCII(self, count=3, background='dark', contrast=1.0):
+        """
+        Print ASCII representations of `count` random images from the dataset.
+
+        Parameters:
+        -----------
+        count : int
+            Number of images to display as ASCII.
+        background : str
+            'dark' for dark terminal background (default),
+            'light' for light background (inverts character map).
+        aspect_ratio : float
+            Height/width aspect correction factor. Characters are taller than wide.
+        contrast : float
+            Adjusts image contrast (1.0 = default, >1.0 = more contrast, <1.0 = less).
+        """
+        if self._X is None or self._Y is None:
+            raise ValueError("Dataset not processed. Call `process_images()` first.")
+
+        # Clean grayscale-friendly character set
+        ascii_chars = "█▇▆▆▅▅▄▃▂▁  "
+        ascii_chars = "■■▦▦▥▥◍◍❂❂❆❆❁❁✵✵✭✭▵▵✩✧◦ "
+        ascii_chars = "■■▦▦▥▥◍❂❆❁✵✭▵✩✧◦ "
+
+        if background == 'dark':
+            ascii_chars = ascii_chars[::-1]
+
+        indices = torch.randperm(len(self._X))[:count]
+
+        for idx in indices:
+            img_tensor = self._X[idx]
+
+            # Convert to grayscale if RGB
+            if img_tensor.shape[0] == 3:
+                tensor = 0.2989 * img_tensor[0] + 0.5870 * img_tensor[1] + 0.1140 * img_tensor[2]
+            elif img_tensor.shape[0] == 1:
+                tensor = img_tensor[0]
+            else:
+                raise ValueError("Unsupported image tensor shape.")
+
+            # Resize: correct for character aspect ratio
+            aspect_ratio = 2.8
+            height, width = tensor.shape
+            new_height = int(height / aspect_ratio)
+            tensor = torch.nn.functional.interpolate(
+                tensor.unsqueeze(0).unsqueeze(0),
+                size=(new_height, width),
+                mode='bilinear',
+                align_corners=False
+            ).squeeze()
+
+            # Normalize to [0, 1]
+            norm = (tensor - tensor.min()) / (tensor.max() - tensor.min() + 1e-5)
+
+            # Apply contrast adjustment
+            norm = 0.5 + contrast * (norm - 0.5)
+            norm = norm.clamp(0, 1)
+
+            # Map to ASCII indices
+            idx_map = (norm * (len(ascii_chars) - 1)).long()
+
+            print("\n" + "-" * idx_map.shape[1])
+            for row in idx_map:
+                print(''.join(ascii_chars[i] for i in row))
+            print("-" * idx_map.shape[1])
+
+            label_idx = self._Y[idx]
+            label_name = self._classDir[label_idx]
+            print(f"[Label: {label_name}]")
+'''
+    def plotext_preview(self, count=3, grayscale=True):
+        """
+        Display a preview of random images in the terminal using plotext.
+
+        Parameters:
+        -----------
+        count : int
+            Number of random images to display.
+        grayscale : bool
+            Whether to render the image in grayscale.
+        fast : bool
+            Use fast rendering mode (faster, less customizable).
+        """
+        if self._X is None or self._Y is None:
+            raise ValueError("Dataset not processed. Call `process_images()` first.")
+
+        indices = torch.randperm(len(self._X))[:count]
+        to_pil = transforms.ToPILImage()
+
+        for idx in indices:
+            img_tensor = self._X[idx]
+            label_idx = self._Y[idx]
+            label_name = self._classDir[label_idx]
+
+            # Convert tensor to PIL, save to buffer
+            img_pil = to_pil(img_tensor)
+            temp_path = "/tmp/imgtorch_preview.png"
+            img_pil.save(temp_path)
+
+            # Plot using plotext
+            plt_ext.clear_data()
+            plt_ext.plotsize(128, 128)
+            plt_ext.image_plot(temp_path, fast=False, grayscale=grayscale)
+            plt_ext.title(f"[Label: {label_name}]")
+            plt_ext.show()
+'''
 
 # Example usage:# img_imp = ImgTorch(baseDir='path/to/data', classDir=['class1', 'class2'], imageSize=(128, 128))
 # img_imp.collect_images()
