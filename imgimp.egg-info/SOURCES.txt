@@ -1,9 +1,0 @@
-README.md
-setup.py
-imgimp/__init__.py
-imgimp/imgimp.py
-imgimp.egg-info/PKG-INFO
-imgimp.egg-info/SOURCES.txt
-imgimp.egg-info/dependency_links.txt
-imgimp.egg-info/requires.txt
-imgimp.egg-info/top_level.txt
