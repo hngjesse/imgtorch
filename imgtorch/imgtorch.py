@@ -269,9 +269,10 @@ class ImgTorch:
 
         # Clean grayscale-friendly character set
         ascii_chars = "█▇▆▆▅▅▄▃▂▁  "
-        ascii_chars = "■■▦▦▥▥◍◍❂❂❆❆❁❁✵✵✭✭▵▵✩✧◦ "
-        ascii_chars = "■■▦▦▥▥◍❂❆❁✵✭▵✩✧◦ "
-
+        ascii_chars = "■■▦▦▥▥◍❆❁✵✭▵✩✧◦ "
+        ascii_chars = "■■▦▦▥▥◍◍❆❆❁❁✵✵✭✭▵▵✩✧◦ "
+        
+        
         if background == 'dark':
             ascii_chars = ascii_chars[::-1]
 
@@ -354,6 +355,14 @@ class ImgTorch:
             plt_ext.title(f"[Label: {label_name}]")
             plt_ext.show()
 '''
+
+
+### Next goal would be to include methods for classification using filename patterns,###
+### data augmentation, and more advanced preprocessing techniques.###
+
+
+
+
 
 # Example usage:# img_imp = ImgTorch(baseDir='path/to/data', classDir=['class1', 'class2'], imageSize=(128, 128))
 # img_imp.collect_images()

@@ -24,11 +24,17 @@ Your dataset should be organized by class subfolders:
 ```
 your_dataset/
 ├── ClassA/
-│   ├── img1.jpg
-│   └── img2.png
+│   ├── iMg1.jpg
+│   ├── ige2.cr2
+│   ├── imG3.cr3
+│   └── imag4.png
 ├── ClassB/
-│   ├── img3.cr2
-│   └── img4.jpeg
+│   ├── imAg5.cr2
+│   ├── imag6.nef
+│   └── imge7.jpeg
+├── ClassC/
+│   ├── img8.dng
+│   └── img9.jpeg
 ```
 
 ---
@@ -42,8 +48,7 @@ from imgtorch import ImgTorch
 
 imp = ImgTorch(
     baseDir="your_dataset",
-    classDir=["ClassA", "ClassB"],
-    imageSize=(128, 128)
+    classDir=["ClassA", "ClassB", "ClassC"]
 )
 ```
 
@@ -52,7 +57,7 @@ imp = ImgTorch(
 ```python
 imp.collect_images()     # Scan all images
 imp.shuffle_images()     # Optional: randomize order
-imp.process_images()     # Load, resize, convert to tensor
+imp.process_images(imageSize=(128,256))     # Load, resize, convert to tensor
 ```
 
 ### 3. Preview
